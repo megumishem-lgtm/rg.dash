@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RG Score Pro | Main Dashboard</title>
+
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  padding: 30px 20px;
+  font-family: Arial, sans-serif;
+  background: #100d1c;
+  color: white;
+}
+
+.container {
+  max-width: 950px;
+  margin: auto;
+}
+
+header {
+  text-align: center;
+  margin-bottom: 35px;
+}
+
+header h1 {
+  color: #c9a5ff;
+  font-size: 34px;
+}
+
+header p { color: #b9adc9; }
+
+.dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 20px;
+}
+
+.card {
+  background: #211a35;
+  border: 1px solid #59427d;
+  border-radius: 15px;
+  padding: 23px;
+}
+
+.card h2 {
+  color: #d7baff;
+  text-align: center;
+}
+
+.card p {
+  color: #c4b8d3;
+  text-align: center;
+}
+
+input {
+  width: 100%;
+  padding: 12px;
+  border-radius: 7px;
+  border: 1px solid #8065a6;
+  background: #171126;
+  color: white;
+  margin: 10px 0;
+}
+
+button {
+  width: 100%;
+  padding: 12px;
+  border: none;
+  border-radius: 8px;
+  background: #8654c9;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-top: 8px;
+}
+
+button:hover { background: #a477e8; }
+
+.status {
+  color: #c9a5ff;
+  font-size: 12px;
+  text-align: center;
+  min-height: 15px;
+}
+
+.footer {
+  text-align: center;
+  margin-top: 40px;
+  color: #9c8cad;
+  font-size: 13px;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<header>
+  <h1>RG SCORE PRO</h1>
+  <p>Rhythmic Gymnastics Judging System</p>
+  <p>Main Dashboard | Judge Portal</p>
+</header>
+
+<div class="dashboard">
+
+  <div class="card">
+    <h2>DB Judge</h2>
+    <p>Body Difficulties</p>
+    <input id="dbURL" type="url" placeholder="Paste DB Judge URL">
+    <button onclick="saveURL('db')">Save URL</button>
+    <button onclick="openURL('db')">Open Portal</button>
+    <div class="status" id="dbStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>DA Judge</h2>
+    <p>Apparatus Difficulties</p>
+    <input id="daURL" type="url" placeholder="Paste DA Judge URL">
+    <button onclick="saveURL('da')">Save URL</button>
+    <button onclick="openURL('da')">Open Portal</button>
+    <div class="status" id="daStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>A Judge</h2>
+    <p>Artistry Evaluation</p>
+    <input id="aURL" type="url" placeholder="Paste Artistry Judge URL">
+    <button onclick="saveURL('a')">Save URL</button>
+    <button onclick="openURL('a')">Open Portal</button>
+    <div class="status" id="aStatus"></div>
+  </div>
+
+  <div class="card">
+    <h2>E Judge</h2>
+    <p>Execution Evaluation</p>
+    <input id="eURL" type="url" placeholder="Paste Execution Judge URL">
+    <button onclick="saveURL('e')">Save URL</button>
+    <button onclick="openURL('e')">Open Portal</button>
+    <div class="status" id="eStatus"></div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <p>RG Score Pro © 2026</p>
+  <p>Rhythmic Gymnastics Scoring Prototype</p>
+</div>
+
+</div>
+
+<script>
+const judges = ["db", "da", "a", "e"];
+
+// Restore saved URLs when the dashboard opens
+judges.forEach(judge => {
+  const savedURL = localStorage.getItem("rg_" + judge + "_url");
+
+  if (savedURL) {
+    document.getElementById(judge + "URL").value = savedURL;
+    document.getElementById(judge + "Status").textContent = "URL saved";
+  }
+});
+
+function saveURL(judge) {
+  const input = document.getElementById(judge + "URL");
+  const url = input.value.trim();
+
+  if (!url || !/^https?:\/\//i.test(url)) {
+    alert("Please enter a valid URL beginning with https:// or http://");
+    return;
+  }
+
+  try {
+    new URL(url);
+  } catch {
+    alert("Please enter a valid website URL.");
+    return;
+  }
+
+  localStorage.setItem("rg_" + judge + "_url", url);
+  document.getElementById(judge + "Status").textContent = "URL saved successfully!";
+}
+
+function openURL(judge) {
+  const url = localStorage.getItem("rg_" + judge + "_url");
+
+  if (!url) {
+    alert("Please enter and save the website URL first.");
+    return;
+  }
+
+  window.open(url, "_blank", "noopener,noreferrer");
+}
+</script>
+
+</body>
+</html>
